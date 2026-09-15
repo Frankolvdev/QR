@@ -1,0 +1,2 @@
+import QRCode from 'qrcode';import {NextResponse} from 'next/server';import {db} from '@/lib/db';import {publicCardUrl} from '@/lib/codes';
+export async function GET(_:Request,{params}:{params:{code:string}}){const card=await db.card.findUnique({where:{code:params.code}});if(!card)return new NextResponse('No existe',{status:404});const svg=await QRCode.toString(publicCardUrl(card.code),{type:'svg',margin:1,errorCorrectionLevel:'M'});return new NextResponse(svg,{headers:{'Content-Type':'image/svg+xml','Cache-Control':'public, max-age=86400'}})}
