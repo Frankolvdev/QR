@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("SELLER")
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  cards        Card[]   @relation("SellerCards")
+  sessions     Session[]
+  audits       AuditLog[]
+
+  @@index([role])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  lastSeen  DateTime @default(now())
+  revokedAt DateTime?
+
+  @@index([userId])
+}
+
+model Batch {
+  id        String   @id @default(cuid())
+  name      String
+  quantity  Int
+  createdAt DateTime @default(now())
+  cards     Card[]
+}
+
+model Card {
+  id             String   @id @default(cuid())
+  code           String   @unique
+  status         String   @default("AVAILABLE")
+  batchId        String?
+  batch          Batch?   @relation(fields: [batchId], references: [id])
+  sellerId       String?
+  seller         User?    @relation("SellerCards", fields: [sellerId], references: [id])
+  businessName   String?
+  representative String?
+  destinationUrl String?
+  claimedAt      DateTime?
+  activatedAt    DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  urlHistory     UrlHistory[]
+
+  @@index([status])
+  @@index([batchId])
+  @@index([sellerId])
+}
+
+model UrlHistory {
+  id        String   @id @default(cuid())
+  cardId    String
+  card      Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  oldUrl    String?
+  newUrl    String
+  changedBy String?
+  createdAt DateTime @default(now())
+
+  @@index([cardId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  entity    String
+  entityId  String?
+  detail    String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([entity, entityId])
+}

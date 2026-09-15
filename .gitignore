@@ -1,0 +1,10 @@
+node_modules
+.next
+.env
+.env.local
+data/*.db
+data/*.db-*
+storage/exports/*
+storage/qr/*
+!storage/exports/.gitkeep
+!storage/qr/.gitkeep

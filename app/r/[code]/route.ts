@@ -1,0 +1,2 @@
+import { db } from "@/lib/db";import { NextResponse } from "next/server";
+export async function GET(_:Request,{params}:{params:{code:string}}){const card=await db.card.findUnique({where:{code:params.code}});if(!card||card.status!=="ACTIVE"||!card.destinationUrl)return new NextResponse("Tarjeta no activa",{status:404});return NextResponse.redirect(card.destinationUrl,302)}

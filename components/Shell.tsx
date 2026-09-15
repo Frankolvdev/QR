@@ -1,0 +1,2 @@
+import { destroySession } from "@/lib/auth"; import { redirect } from "next/navigation";
+export default function Shell({title,user,children}:{title:string,user:{name:string;role:string},children:React.ReactNode}){async function logout(){"use server";await destroySession();redirect("/login")}return <><nav className="nav"><b>{title}</b><form action={logout}><span style={{marginRight:12}}>{user.name}</span><button className="btn" style={{background:"#374151"}}>Cerrar sesión</button></form></nav><main className="wrap">{children}</main></>}

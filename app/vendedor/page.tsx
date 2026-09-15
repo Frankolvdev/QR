@@ -1,0 +1,2 @@
+import { currentUser } from "@/lib/auth";import { redirect } from "next/navigation";import Shell from "@/components/Shell";
+export default async function Seller(){const u=await currentUser();if(!u)redirect("/login");return <Shell title="QR System · Vendedor" user={u}><h1>Registrar nueva tarjeta</h1><div className="card"><p className="muted">Escanea el QR de la tarjeta o introduce el código impreso debajo del QR.</p><input className="input" placeholder="Código de tarjeta"/><button className="btn">Continuar</button></div></Shell>}
