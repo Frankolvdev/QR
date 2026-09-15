@@ -9,3 +9,5 @@ storage/qr/*
 *.zip
 !storage/exports/.gitkeep
 !storage/qr/.gitkeep
+
+*.zip
