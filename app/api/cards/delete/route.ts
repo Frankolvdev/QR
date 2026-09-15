@@ -1,0 +1,4 @@
+import {NextResponse} from 'next/server';
+import {currentUser} from '@/lib/auth';
+import {db} from '@/lib/db';
+export async function POST(req:Request){const u=await currentUser();if(!u||u.role!=='ADMIN')return new NextResponse('No autorizado',{status:401});let body:{ids?:unknown};try{body=await req.json()}catch{return new NextResponse('Solicitud inválida',{status:400})}const ids=Array.isArray(body.ids)?body.ids.filter((x):x is string=>typeof x==='string').slice(0,500):[];if(!ids.length)return new NextResponse('No hay tarjetas seleccionadas',{status:400});await db.$transaction(async tx=>{await tx.urlHistory.deleteMany({where:{cardId:{in:ids}}});await tx.card.deleteMany({where:{id:{in:ids}}});await tx.auditLog.create({data:{userId:u.id,action:'DELETE_CARDS',entity:'Card',detail:`Eliminadas ${ids.length} tarjeta(s)`}})});return NextResponse.json({ok:true,count:ids.length})}
