@@ -40,3 +40,9 @@ No ejecutar `npm audit fix --force`. Puede introducir cambios mayores incompatib
 
 ## V3
 Los campos `role` y `status` son String porque Prisma 5.22 + SQLite no soporta enums nativos. La aplicación conserva los valores controlados ADMIN/SELLER y AVAILABLE/IN_REGISTRATION/ACTIVE/DISABLED/REPLACED.
+
+## V7 - estados públicos y PDF para imprenta
+- Las tarjetas no activas ya no redirigen al destino: muestran una pantalla pública de estado.
+- Exportación individual o múltiple de QR en PDF A4.
+- Tamaño físico configurable del QR en milímetros; el código único aparece debajo.
+- Corrección visual del badge de estado en el área del vendedor.
