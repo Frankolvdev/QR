@@ -13,7 +13,7 @@ const papers:Record<Exclude<PaperKey,'CUSTOM'>,{label:string,w:number,h:number}>
 export default function QrPdfExport({cards}:{cards:CardItem[]}){
  const [selected,setSelected]=useState<string[]>([]); const [size,setSize]=useState('30'); const [paper,setPaper]=useState<PaperKey>('A4'); const [customW,setCustomW]=useState('210'); const [customH,setCustomH]=useState('297'); const [busy,setBusy]=useState(false);
  const all=useMemo(()=>cards.length>0&&selected.length===cards.length,[cards.length,selected.length]);
- const batches=useMemo(()=>Array.from(new Map(cards.filter(c=>c.batchId).map(c=>[c.batchId!,c.batchName||'Sin nombre']])).entries()),[cards]);
+ const batches=useMemo(()=>Array.from(new Map(cards.filter(c=>c.batchId).map(c=>[c.batchId!,c.batchName||'Sin nombre'])).entries()),[cards]);
  function toggle(id:string){setSelected(v=>v.includes(id)?v.filter(x=>x!==id):[...v,id])}
  function selectBatch(batchId:string){setSelected(cards.filter(c=>c.batchId===batchId).map(c=>c.id))}
  const sizeNum=Number(size); const validSize=Number.isFinite(sizeNum)&&sizeNum>=10&&sizeNum<=100;

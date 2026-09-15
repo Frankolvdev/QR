@@ -11,3 +11,5 @@ storage/qr/*
 !storage/qr/.gitkeep
 
 *.zip
+
+*.zip
