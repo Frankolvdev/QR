@@ -18,8 +18,8 @@ export async function POST(req:Request){
   if(i%perPage===0)pdf.addPage([pageW,pageH]); const page=pdf.getPages()[pdf.getPageCount()-1]; const pos=i%perPage,row=Math.floor(pos/cols),col=pos%cols;
   const x=margin+col*(cellW+gap)+(cellW-qr)/2; const y=pageH-margin-(row+1)*cellH-row*gap+codeH+mm(2);
   const png=await QRCode.toBuffer(publicCardUrl(cards[i].code),{type:'png',width:900,margin:1,errorCorrectionLevel:'M'}); const img=await pdf.embedPng(png); page.drawImage(img,{x,y,width:qr,height:qr});
-  const code=cards[i].code; const fs=Math.min(11,qr/7); const tw=font.widthOfTextAtSize(code,fs); page.drawText(code,{x:x+(qr-tw)/2,y:y-mm(5),size:fs,font,color:rgb(.05,.05,.05)});
-  const tiny=`QR ${qrSizeMm} mm`; const ts=5.5,tt=regular.widthOfTextAtSize(tiny,ts); page.drawText(tiny,{x:x+(qr-tt)/2,y:y-mm(7.2),size:ts,font:regular,color:rgb(.45,.45,.45)});
+  const code=cards[i].code; const fs=Math.min(7.5,Math.max(5.5,qr/11)); const tw=font.widthOfTextAtSize(code,fs); page.drawText(code,{x:x+(qr-tw)/2,y:y-mm(5),size:fs,font,color:rgb(.05,.05,.05)});
+  
  }
  const bytes=await pdf.save(); return new NextResponse(bytes,{headers:{'content-type':'application/pdf','content-disposition':'attachment; filename="qr-cards.pdf"','cache-control':'no-store'}});
 }
