@@ -6,5 +6,6 @@ data/*.db
 data/*.db-*
 storage/exports/*
 storage/qr/*
+*.zip
 !storage/exports/.gitkeep
 !storage/qr/.gitkeep
